@@ -1,11 +1,39 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+// Apply filters, search, and sort (case-insensitive)
+const applyFiltersAndSort = (state) => {
+  const { size, color, brand, category } = state.filters;
+
+  let result = state.products.filter((product) => {
+    return (
+      (!size.length || size.some((s) => product.size?.map(v => v.toLowerCase()).includes(s))) &&
+      (!color.length || color.includes(product.color?.toLowerCase())) &&
+      (!brand.length || brand.includes(product.brand?.toLowerCase())) &&
+      (!category.length || category.includes(product.category?.toLowerCase())) &&
+      product.name.toLowerCase().includes(state.searchQuery.toLowerCase())
+    );
+  });
+
+  // Sort
+  if (state.sort === 'price-asc') {
+    result.sort((a, b) => a.price - b.price);
+  } else if (state.sort === 'price-desc') {
+    result.sort((a, b) => b.price - a.price);
+  } else if (state.sort === 'popularity-asc') {
+    result.sort((a, b) => a.popularity - b.popularity);
+  } else {
+    result.sort((a, b) => b.popularity - a.popularity);
+  }
+
+  state.filteredProducts = result;
+};
+
 const productSlice = createSlice({
   name: 'products',
   initialState: {
     products: [],
     filteredProducts: [],
-    filters: { size: [], color: [], brand: [] },
+    filters: { size: [], color: [], brand: [], category: [] },
     sort: 'price-asc',
     searchQuery: '',
     visibleCount: 2,
@@ -13,33 +41,19 @@ const productSlice = createSlice({
   reducers: {
     setProducts: (state, action) => {
       state.products = action.payload;
-      state.filteredProducts = action.payload;
+      applyFiltersAndSort(state);
     },
     setFilters: (state, action) => {
       state.filters = { ...state.filters, ...action.payload };
-      state.filteredProducts = state.products.filter((product) => {
-        return (
-          (!state.filters.size.length || state.filters.size.some((size) => product.size.includes(size))) &&
-          (!state.filters.color.length || state.filters.color.includes(product.color)) &&
-          (!state.filters.brand.length || state.filters.brand.includes(product.brand)) &&
-          product.name.toLowerCase().includes(state.searchQuery.toLowerCase())
-        );
-      });
+      applyFiltersAndSort(state);
     },
     setSort: (state, action) => {
       state.sort = action.payload;
-      state.filteredProducts = [...state.filteredProducts].sort((a, b) => {
-        if (action.payload === 'price-asc') return a.price - b.price;
-        if (action.payload === 'price-desc') return b.price - a.price;
-        if (action.payload === 'popularity-asc') return a.popularity - b.popularity;
-        return b.popularity - a.popularity;
-      });
+      applyFiltersAndSort(state);
     },
     setSearchQuery: (state, action) => {
       state.searchQuery = action.payload;
-      state.filteredProducts = state.products.filter((product) =>
-        product.name.toLowerCase().includes(action.payload.toLowerCase())
-      );
+      applyFiltersAndSort(state);
     },
     loadMore: (state) => {
       state.visibleCount += 2;
@@ -47,5 +61,12 @@ const productSlice = createSlice({
   },
 });
 
-export const { setProducts, setFilters, setSort, setSearchQuery, loadMore } = productSlice.actions;
+export const {
+  setProducts,
+  setFilters,
+  setSort,
+  setSearchQuery,
+  loadMore,
+} = productSlice.actions;
+
 export default productSlice.reducer;

@@ -265,7 +265,7 @@
     {
       "id": "18",
       "name": "Gray Slippers",
-      "category": "Footwear",
+      "category": "footwear",
       "price": 20,
       "size": [
         "7",

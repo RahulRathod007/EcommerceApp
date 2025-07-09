@@ -1,24 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import ProductList from '../components/Product/ProductList';
-import SearchBar from '../components/Product/SearchBar';
 import Filters from '../components/Product/Filters';
 
 const sliderImages = [
   {
-    url: 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1600&q=80',
-    caption: 'Seamless Online Shopping',
+    url: 'https://t3.ftcdn.net/jpg/07/94/31/84/360_F_794318493_zd15A3T9jwufIZbz13GhXleOZlNCu8Vj.jpg',
   },
   {
-    url: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80',
-    caption: 'Accessories & More',
+    url: 'https://static.vecteezy.com/system/resources/previews/011/871/813/non_2x/online-shopping-on-phone-buy-sell-business-digital-web-banner-application-money-advertising-payment-ecommerce-illustration-search-vector.jpg',
   },
   {
-    url: 'https://images.unsplash.com/photo-1515165562835-c1c2b3d8a3b8?auto=format&fit=crop&w=1600&q=80',
-    caption: 'Shop the Latest Trends',
+    url: 'https://t4.ftcdn.net/jpg/03/48/05/45/360_F_348054579_rsxfPG9B3LJBzE173cXPJAMuGGmBkmKS.jpg',
   },
   {
-    url: 'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=1600&q=80',
-    caption: 'Exclusive Fashion Deals',
+    url: 'https://img.freepik.com/premium-psd/black-friday-sale-social-media-post-instagram-post-web-banner-facebook-cover-template_220443-1074.jpg?semt=ais_hybrid&w=740',
   },
 ];
 
@@ -29,14 +24,22 @@ const Home = () => {
   const nextSlide = () => setCurrent((current + 1) % sliderImages.length);
   const prevSlide = () => setCurrent((current - 1 + sliderImages.length) % sliderImages.length);
 
-  // Update window width on resize
+  // ⛓ Update window width on resize
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Dynamic styles based on screen width
+  // ⏱ Auto-slide every 2 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % sliderImages.length);
+    }, 2000); // 2 seconds
+    return () => clearInterval(interval);
+  }, []);
+
+  // 🎨 Style Functions
   const getSliderStyles = () => ({
     width: '100vw',
     height: windowWidth < 768 ? '300px' : '420px',
@@ -86,8 +89,8 @@ const Home = () => {
   });
 
   return (
-    <div style={{ fontFamily: 'Poppins, Arial, sans-serif', background: '#f7f7f7', minHeight: '100vh',padding: '5px' }}>
-      {/* Full-width slider */}
+    <div style={{ fontFamily: 'Poppins, Arial, sans-serif', background: '#f7f7f7', minHeight: '100vh', padding: '5px' }}>
+      {/* 📸 Image Slider */}
       <div style={getSliderStyles()}>
         {/* Overlay */}
         <div
@@ -98,7 +101,7 @@ const Home = () => {
             zIndex: 1,
           }}
         />
-        {/* Caption */}
+        {/* Caption (optional) */}
         <div
           style={{
             position: 'absolute',
@@ -115,7 +118,8 @@ const Home = () => {
         >
           {sliderImages[current].caption}
         </div>
-        {/* Navigation Buttons */}
+
+        {/* ⬅ Prev Button */}
         <button
           onClick={prevSlide}
           onMouseOver={getHoverFocusStyles}
@@ -130,6 +134,8 @@ const Home = () => {
         >
           ←
         </button>
+
+        {/* ➡ Next Button */}
         <button
           onClick={nextSlide}
           onMouseOver={getHoverFocusStyles}
@@ -144,7 +150,8 @@ const Home = () => {
         >
           →
         </button>
-        {/* Dots */}
+
+        {/* ⭕ Dots */}
         <div
           style={{
             position: 'absolute',
@@ -167,6 +174,8 @@ const Home = () => {
           ))}
         </div>
       </div>
+
+      {/* 🛒 Header */}
       <h1
         style={{
           textAlign: 'center',
@@ -179,13 +188,13 @@ const Home = () => {
       >
         Welcome to the E-commerce Store
       </h1>
+
+      {/* 🧰 Filters + Product List */}
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 15px' }}>
-        <Filters />
         <div
           style={{
-            width: windowWidth < 768 ? '100%' : '100%',
+            width: '100%',
             margin: '0 auto',
-            // background: '#ffffff',
             borderRadius: '15px',
             boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
             padding: windowWidth < 768 ? '20px' : '32px 24px',

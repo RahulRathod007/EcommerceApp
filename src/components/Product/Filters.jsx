@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Row, Col } from 'react-bootstrap';
 
-const Filters = ({ setFilters, setSort }) => {
+const Filters = ({ onFilterChange, onSortChange }) => {
   const categories = ['', 'Clothing', 'Footwear'];
   const sizes = ['', 'S', 'M', 'L'];
   const colors = ['', 'Blue', 'Red', 'Black'];
@@ -9,29 +9,26 @@ const Filters = ({ setFilters, setSort }) => {
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
-    setFilters((prev) => ({
-      ...prev,
-      [name]: value ? [value] : [],
-    }));
+    onFilterChange({ [name]: value ? [value.toLowerCase()] : [] }); // send lowercase to Redux
   };
 
   const handleSortChange = (e) => {
-    setSort(e.target.value);
+    onSortChange(e.target.value);
   };
 
-  // Styles for the form and select elements
   const formStyles = {
-    backgroundColor: '#F4BB44' ,
+    backgroundColor: '#F4BB44',
     padding: '30px',
     borderRadius: '10px',
     boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
   };
+
   const labelStyles = {
     fontWeight: '600',
     color: '#2c3e50',
     marginBottom: '10px',
-
   };
+
   const selectStyles = {
     width: '100%',
     padding: '10px',
@@ -40,19 +37,14 @@ const Filters = ({ setFilters, setSort }) => {
     fontSize: '1rem',
     transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
   };
-  const selectFocusStyles = {
-    borderColor: '#007bff',
-    boxShadow: '0 0 5px rgba(0, 123, 255, 0.5)',
-  };
-  
-  // Handle focus state for select inputs
+
   const handleSelectFocus = (e) => {
-    e.target.style.borderColor = selectFocusStyles.borderColor;
-    e.target.style.boxShadow = selectFocusStyles.boxShadow;
+    e.target.style.borderColor = '#007bff';
+    e.target.style.boxShadow = '0 0 5px rgba(0, 123, 255, 0.5)';
   };
 
   const handleSelectBlur = (e) => {
-    e.target.style.borderColor = selectStyles.border;
+    e.target.style.borderColor = '#ced4da';
     e.target.style.boxShadow = 'none';
   };
 
