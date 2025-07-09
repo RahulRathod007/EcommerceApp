@@ -1,5 +1,4 @@
 <<<<<<< HEAD
-# EcommerceApp
 
 # E-commerce Application
 
