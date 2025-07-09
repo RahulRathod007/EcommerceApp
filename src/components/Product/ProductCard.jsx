@@ -42,7 +42,7 @@ const ProductCard = ({ product }) => {
             borderTopLeftRadius: '10px',
             borderTopRightRadius: '10px',
             height: '350px',
-            objectFit: 'contain'
+            objectFit: 'fit'
           }}
         />
       )}
