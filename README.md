@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-
 # E-commerce Application
 
 ## Overview
